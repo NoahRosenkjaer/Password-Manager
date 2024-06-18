@@ -1,48 +1,79 @@
-import { Button, VerticalBox, Slider, HorizontalBox} from "std-widgets.slint";
+import { Button, VerticalBox, Slider, HorizontalBox, CheckBox} from "std-widgets.slint";
 
 export component AppWindow inherits Window {
     
     // Logic
     in-out property <int> length: round(slider.value);
     in-out property <string> password: "";
-    callback button-pressed <=> button.clicked;
+    callback button-pressed <=> gen-button.clicked;
     
     // Style
-    width: 300px;
+    width: 400px;
+    height: 200px;
     background: #1E2227;
-    
-    VerticalBox {
-        padding: 20px;
-        Text {
-            color: white;
-            text: "Password Generator";
-            font-size: 20px;
+
+    HorizontalBox {
+        VerticalBox {
+            CheckBox {
+                toggled => {
+                    if (self.checked) {
+                        test.x = test.x - 60px;
+                        test.text = "";
+
+                    } else {
+                        test.primary = true;
+                        test.x = test.x + 60px;
+                        test.text = "Testing";
+                    }
+                }
+            }
+
+            test := Button {
+                primary: true;
+                text: "Testing";
+                x: 0px;
+                height: 30px;
+                checked: false;
+                clicked => {
+                    self.checked =! self.checked;
+                    if self.checked {pass-gen.x = + 1000px;} else {pass-gen.x = + 100px;};
+                }
+            }
         }
+        pass-gen := VerticalBox {
+            padding: 20px;
+            Text {
+                color: white;
+                text: "Password Generator";
+                font-size: 20px;
+            }
+            
+            HorizontalBox {
+                slider := Slider {
+                    value: 20;
+                }
         
-        HorizontalBox {
-            slider := Slider {
-                value: 20;
+                Text {
+                    
+                    text: "Value: \{round(slider.value)}";
+                    color: white;
+                }
+            }
+    
+            gen-button := Button {
+                text: "Generate";
+                primary: true;
+                clicked => {
+                    root.length = round(slider.value);
+                }
             }
     
             Text {
-                
-                text: "Value: \{round(slider.value)}";
                 color: white;
+                text: "\{root.password}";
             }
+    
         }
-
-        button := Button {
-            text: "Generate";
-            primary: true;
-            clicked => {
-                root.length = round(slider.value);
-            }
-        }
-
-        Text {
-            color: white;
-            text: "\{root.password}";
-        }
-
     }
+    
 }
