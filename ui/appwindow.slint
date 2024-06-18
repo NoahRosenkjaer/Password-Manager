@@ -1,15 +1,18 @@
 import { Button, VerticalBox, Slider, HorizontalBox} from "std-widgets.slint";
 
 export component AppWindow inherits Window {
+    
+    // Logic
     in-out property <int> length: round(slider.value);
     in-out property <string> password: "";
     callback button-pressed <=> button.clicked;
     
+    // Style
+    width: 300px;
     background: #1E2227;
+    
     VerticalBox {
         padding: 20px;
-        min-width: 300px;
-        preferred-width: 300px;
         Text {
             color: white;
             text: "Password Generator";
